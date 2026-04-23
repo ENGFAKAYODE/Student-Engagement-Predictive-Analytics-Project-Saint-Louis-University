@@ -19,61 +19,55 @@ This project focuses on the intersection of EdTech and Data Science by analyzing
 
 ---
 
-## 1. Introduction
+## 1. INTRODUCTION
 
 This report presents a comprehensive Exploratory Data Analysis (EDA) and Predictive Modeling deliverable for the **RIT 0903 AI Data Analysis** programme at Excelerate. This enhanced analysis builds on the full raw dataset of **8,390 learner records** from the SLU Opportunity Platform, incorporating a critical new engineered feature — `Has_Start_Date` — which identifies learners who never progressed to the start stage of their assigned opportunity.
 
 The primary prediction task is **Learner Churn (Drop-off) Prediction**, identifying which learners are at risk of dropping out or withdrawing before completion.
 
-> **🔑 Key Finding:** Gradient Boosting is the best model (Accuracy **94.22%**). Engagement Lag (`0.622`) and Time in Opportunity (`0.258`) are the two dominant churn predictors. The introduction of `Has_Start_Date` as a feature revealed that **44% of raw records** represent learners who never started — a previously hidden and critical risk segment.
+> **Key Finding:** Gradient Boosting is the best model (Accuracy **94.22%**). Engagement Lag (`0.622`) and Time in Opportunity (`0.258`) are the two dominant churn predictors. The introduction of `Has_Start_Date` as a feature revealed that **44% of raw records** represent learners who never started a previously hidden and critical risk segment.
 
 ---
 
-## 2. Objective
-
+## 2. OBJECTIVES
 The primary objective of this project is to build a reliable and interpretable **Learner Churn Prediction System** using structured data from the SLU Opportunity Platform. Specifically, the analysis aims to:
 
-· Analyze and clean student engagement data to
+- Analyze and clean student engagement data to
 uncover trends in signups, completions, and drop-offs.
 
-. Build machine learning models to predict student
+- Build machine learning models to predict student
 behaviors and identify factors influencing engagement.
 
-. Develop recommendations to
+- Develop recommendations to
 engagement, focusing on increasing successful
 completions and reducing drop-offs.
 
 ---
 
-## 3. Goals
+## 3. GOALS
 
-| # | Goal |
-|---|---|
-| 1 | Perform comprehensive EDA on 8,390 learner records from the full raw dataset |
-| 2 | Engineer and validate the `Has_Start_Date` binary feature to capture pre-start dropout |
-| 3 | Train 5 machine learning classification models and evaluate on a held-out test set |
-| 4 | Identify the top churn predictors using feature importance from the best model |
-| 5 | Deliver three strategic, data-driven recommendations traceable to model outputs |
-| 6 | Provide a sign-up volume forecast with confidence intervals for capacity planning |
+1. Perform comprehensive EDA on 8,390 learner records from the full raw dataset 
+2. Train 5 machine learning classification models and evaluate on a held-out test set 
+3. Identify the top churn predictors using feature importance from the best model 
+4. Deliver three strategic, data-driven recommendations traceable to model outputs 
+5. Provide a sign-up volume forecast with confidence intervals for capacity planning 
 
 ---
 
-## 4. Other Skills Demonstrated
+## 4. OTHER SKILLS DEMONSTRATED
 
 Beyond core EDA and modelling, this project demonstrates proficiency in:
 
-- **Feature Engineering** — Constructing `Has_Start_Date`, Engagement Lag, and composite Engagement Score from raw timestamps and categorical weights.
-- **Data Artifact Detection** — Identifying and correcting Excel date-zero corruption that inflated `Time in Opportunity` values for never-started learners.
-- **Class Imbalance Awareness** — Diagnosing zero-performance in Logistic Regression and SVM caused by an 8.24% churn class imbalance, and proposing SMOTE as a resolution pathway.
-- **Time-Series Forecasting** — Fitting a linear regression trend model to monthly sign-up data with a 95% confidence interval projection.
-- **Visual Storytelling** — Portfolio of 13 visualizations across distribution, categorical, correlation, and model evaluation plots.
-- **Strategic Communication** — Translating statistical findings into three executive-ready intervention proposals.
+- **Feature Engineering**: Constructing `Has_Start_Date`, Engagement Lag, and composite Engagement Score from raw timestamps and categorical weights.
+- **Data Artifact Detection**: Identifying and correcting Excel date-zero corruption that inflated `Time in Opportunity` values for never-started learners.
+- **Class Imbalance Awareness**: Diagnosing zero-performance in Logistic Regression and SVM caused by an 8.24% churn class imbalance, and proposing SMOTE as a resolution pathway.
+- **Time-Series Forecasting**: Fitting a linear regression trend model to monthly sign-up data with a 95% confidence interval projection.
+- **Visual Storytelling**: Portfolio of 13 visualizations across distribution, categorical, correlation, and model evaluation plots.
+- **Strategic Communication**: Translating statistical findings into three executive-ready intervention proposals.
 
 ---
 
-## 5. Data Overview
-
-### 5.1 Dataset Summary
+## 5. DATA SUMMARY
 
 | Metric | Value |
 |---|---|
@@ -83,118 +77,137 @@ Beyond core EDA and modelling, this project demonstrates proficiency in:
 | Global Churn Rate | 8.24% |
 
 
-### 5.2. Data Description
+### 5.1 Data Dictionary
 
 Source: SLU Opportunity-Wise Data (SLU_Opportunity_Wise_Data.xlsx)
 The raw dataset contains 8,558 records across 16 columns, capturing learner engagement across various opportunity types.
 
-Column	Description
-Learner SignUp DateTime	Date and time the learner signed up
-Opportunity ID / Name	Unique identifier and name of the opportunity
-Opportunity Category	Type: Course, Internship, Event, Competition, Engagement
-Opportunity Start / End Date	Duration boundaries of the opportunity
-First Name	Learner's first name
-Date of Birth	Used to derive the Age feature
-Gender	Male, Female, Other, Don't want to specify
-Country	Learner's country (top: USA, India, Nigeria, Ghana)
-Institution Name	Learner's institution (5 missing values)
-Current/Intended Major	Field of study (5 missing values)
-Status Description / Code	Learner's current status in the opportunity
-Apply Date	Date the learner applied
-Entry Created At	System entry timestamp
+| Column                          | Description                                                                 |
+|---------------------------------|-----------------------------------------------------------------------------|
+| Learner SignUp DateTime         | Date and time the learner signed up                                        |
+| Opportunity ID / Name           | Unique identifier and name of the opportunity                              |
+| Opportunity Category            | Type: Course, Internship, Event, Competition, Engagement                   |
+| Opportunity Start / End Date    | Duration boundaries of the opportunity                                     |
+| First Name                      | Learner's first name                                                       |
+| Date of Birth                   | Used to derive the Age feature                                             |
+| Gender                          | Male, Female, Other, Don't want to specify                                 |
+| Country                         | Learner's country (top: USA, India, Nigeria, Ghana)                        |
+| Institution Name                | Learner's institution (5 missing values)                                   |
+| Current/Intended Major          | Field of study (5 missing values)                                          |
+| Status Description / Code       | Learner's current status in the opportunity                                |
+| Apply Date                      | Date the learner applied                                                   |
+| Entry Created At                | System entry timestamp                                                     |
 
-### 5.3 Data Cleaning Process, Issues Encountered and Resolutions
+### 5.2 Data Cleaning Process, Issues Encountered and Resolutions
 
 The raw dataset of 8,558 records underwent several cleaning steps. The cleaned dataset resulted in 4,682 usable records across 39 columns.
 
-1. Text Standardisation
+**1. Text Standardisation**
+
 Applied Title Case (Text.Proper) to Institution Name, Country, and Current/Intended Major.
-2. Handling Errors and Missing Values
-•	Removed rows with errors in 'Learner SignUp DateTime' and Apply Date
-•	Filtered out rows where 'Opportunity Start Date' was null — could not be used for duration-based calculations
+
+**2. Handling Errors and Missing Values**
+-	Removed rows with errors in 'Learner SignUp DateTime' and Apply Date
+-	Filtered out rows where 'Opportunity Start Date' was null — could not be used for duration-based calculations
 
 Column	Missing Count	Resolution
-Opportunity Start Date	3,794 (44%)	Rows excluded from time-based calculations
-Institution Name	5	Retained as null — not critical for analysis
-Current/Intended Major	5	Retained as null — not critical for analysis
+Opportunity Start Date:	3,794 (44%)	missing, led to the engineering of an additional feature Has_Start_Date
+Institution Name:	5	Retained as null — not critical for analysis
+Current/Intended Major:	5	Retained as null — not critical for analysis
 
-3. Data Type Conversions
-•	Converted Learner SignUp DateTime, Opportunity End Date, Opportunity Start Date and Date of Birth to DateTime type
-•	Converted Age to Integer type
-4. Derived / Extracted Columns
-•	Age — calculated as difference between current date and Date of Birth divided by 365
-•	Learner SignUp Year, Month, and Day — extracted from Learner SignUp DateTime
+**3. Data Type Conversions**
+-	Converted Learner SignUp DateTime, Opportunity End Date, Opportunity Start Date and Date of Birth to DateTime type
+-	Converted Age to Integer type
+
+**4. Derived / Extracted Columns**
+-	Age: calculated as difference between current date and Date of Birth divided by 365
+-	Learner SignUp Year, Month, and Day — extracted from Learner SignUp DateTime
 
 
-5. Issues Encountered and Resolutions
-Issue 1 — Categorical Inconsistencies in Institution Name
+#### 5.3.1 Issues Encountered and Resolutions
+- **Issue 1:** Categorical Inconsistencies in Institution Name
 Entries like 'Federal University Lokoja' and 'Federal University Lokoja, Nigeria' referred to the same institution. Standardised using Text.Proper and manual grouping.
-Issue 2 — Invalid Datetime Hour Overflow (24:xx:xx)
+- **Issue 2:** Invalid Datetime Hour Overflow (24:xx:xx)
 Some datetime values contained impossible hours (e.g., 24:00:09). Resolved by replacing '24:' with '00:' and adding 1 day.
+
 // Power Query M Code
 fixed = Text.Replace(raw, " 24:", " 00:"),
 dt = DateTime.FromText(fixed),
 corrected = if hour >= 24 then
   DateTime.From(Date.AddDays(DateTime.Date(dt), 1)) + DateTime.Time(dt) else dt
-Issue 3 — Negative Time in Opportunity Value
+  
+- **Issue 3:** Negative Time in Opportunity Value
 Dates were flipped when opportunity end date was less than start date.
+
 = IF([@[Opportunity End Date]] < [@[Opportunity Start Date]],
     [@[Opportunity Start Date]] - [@[Opportunity End Date]],
     [@[Opportunity End Date]] - [@[Opportunity Start Date]])
-Issue 4 — Nested Table Values in Power Query
+    
+- **Issue 4:** Nested Table Values in Power Query
 The Learner SignUp DateTime column returned 'Table' objects. Resolved using Table.FirstValue() to extract the correct scalar value.
 
 ### 5.4 Feature Engineering
-
 14 new features were engineered to enrich the dataset for machine learning:
 
-Feature Name	Derived From	Rationale
-Age	Date of Birth + Current Date	Captures learner demographic profile
-Time in Opportunity	Apply Date + Opportunity End Date	Measures active engagement duration
-Engagement Lag	SignUp DateTime + Apply Date	Time between signup and application — behavioural indicator
-Learner SignUp Year	Learner SignUp DateTime	Enables trend analysis across years
-Learner SignUp Month	Learner SignUp DateTime	Enables seasonal/monthly pattern analysis
-Learner SignUp Day	Learner SignUp DateTime	Identifies peak signup days of the week
-Normalised Age	Age	Rescales Age to 0–1 for fair model weighting
-Normalised Time in Opportunity	Time in Opportunity	Rescales duration to 0–1 range
-Normalised Opportunity Category	Encoded Opportunity Category	Brings category score to 0–1 scale
-Encoded Gender	Gender	Converts Male/Female to binary (1/0)
-Encoded Country (US, India, Nigeria, Ghana, Others)	Country	One-hot encodes top 4 countries; rest grouped as Others
-Encoded Opportunity Category	Opportunity Category	One-hot encodes each opportunity type as binary column
-Age x Time in Opportunity	Age + Time in Opportunity	Interaction feature capturing joint influence on outcomes
-Engagement Score	Normalised Age + Time + Category	Composite metric summarising overall engagement level
+| Feature Name                          | Derived From                                 | Rationale                                                                 |
+|--------------------------------------|----------------------------------------------|---------------------------------------------------------------------------|
+| Age                                  | Date of Birth + Current Date                 | Captures learner demographic profile                                     |
+| Time in Opportunity                  | Apply Date + Opportunity End Date            | Measures active engagement duration                                      |
+| Engagement Lag                       | SignUp DateTime + Apply Date                 | Time between signup and application, behavioural indicator               |
+| Learner SignUp Year                  | Learner SignUp DateTime                      | Enables trend analysis across years                                      |
+| Learner SignUp Month                 | Learner SignUp DateTime                      | Enables seasonal and monthly pattern analysis                            |
+| Learner SignUp Day                   | Learner SignUp DateTime                      | Identifies peak signup days of the week                                  |
+| Normalised Age                       | Age                                          | Rescales Age to 0–1 for fair model weighting                             |
+| Normalised Time in Opportunity       | Time in Opportunity                          | Rescales duration to 0–1 range                                           |
+| Normalised Opportunity Category      | Encoded Opportunity Category                 | Brings category score to 0–1 scale                                       |
+| Encoded Gender                       | Gender                                       | Converts Male and Female to binary values                                |
+| Encoded Country (US, India, Nigeria, Ghana, Others) | Country                         | One hot encodes top 4 countries and groups others                        |
+| Encoded Opportunity Category         | Opportunity Category                         | One hot encodes each opportunity type as a binary column                 |
+| Age x Time in Opportunity            | Age + Time in Opportunity                    | Interaction feature capturing joint influence on outcomes                |
+| Engagement Score                     | Normalised Age + Time + Category             | Composite metric summarising overall engagement level                    |
 
-Feature Engineering Calculations
-Example 1 — Age
-Age was derived by calculating the difference between the learner's Date of Birth and the current date, divided by 365.
+#### 5.4.1 Feature Engineering Calculations
+- **1. Age** 
+Age was derived by calculating the difference between the learner's Date of Birth and the current date, divided by 365
+
 Age = (DateTime.LocalNow() - [Date of Birth]) / 365
-Example 2 — Min-Max Normalisation
+
+- **2. Min-Max Normalisation** 
+
 =([@Age] - MIN([Age])) / (MAX([Age]) - MIN([Age]))
-An Age of 23 in a range of 16–60 normalises to approximately 0.16.
-Example 3 — Encoded Country (Others)
+An Age of 23 in a range of 16–60 normalises to approximately 0.16
+
+- **3. Encoded Country (Others)** 
+
 =IF(OR([@Country]="United States",[@Country]="India",[@Country]="Nigeria",[@Country]="Ghana"),0,1)
-Example 4 — Opportunity Category Encoding
+
+- **4. Opportunity Category Encoding**
 Encoded based on expected engagement level 1–5 (Internship=5, Course=4, Competition=3, Engagement=2, Event=1).
+
 =IF([@[Opportunity Category]]="Internship",5, IF([@[Opportunity Category]]="Course",4,
   IF([@[Opportunity Category]]="Competition",3, IF([@[Opportunity Category]]="Engagement",2,
     IF([@[Opportunity Category]]="Event",1,0)))))
-Example 5 — Engagement Score
+    
+- **5. Engagement Score** 
+
 Engagement Score = (0.5 × Time_Normalized) + (0.2 × Age_Normalized) + (0.3 × OpportunityCategory_Normalized)
-•	Time in Opportunity weighted 50% — most direct measure of active engagement
-•	Opportunity Category weighted 30% — reflects varying commitment levels
-•	Age contributed 20% — demographic influence factor
+
+Time in Opportunity weighted 50% - most direct measure of active engagement
+Opportunity Category weighted 30% - reflects varying commitment levels
+Age contributed 20% - demographic influence factor
 
 ### 5.5 Data Validation
-e. Data Validation
 
-Validation Check	Method	Outcome
-Datetime format consistency	Checked all datetime columns parsed without errors in Power Query	Passed — all remaining rows have valid datetime values
-Null value check	Reviewed column quality indicators in Power Query (Valid/Error/Empty %)	Learner SignUp DateTime: 100% valid; Opportunity Start Date nulls fully removed
-Age range check	Filtered Age column for values below 10 or above 100	No unrealistic age values found
-Normalised value range	Verified min and max of normalised columns in Excel	All normalised columns confirmed within 0–1 range
-Engagement Score range	Checked min/max of Engagement Score column	Values confirmed within expected bounds
-Category encoding accuracy	Spot-checked encoded columns against original Category column	One-hot encoded values correctly matched source categories
-Duplicate check	Checked for duplicate Learner + Opportunity ID combinations	No duplicates found in cleaned dataset
+| Validation Check              | Method                                                                 | Outcome                                                                 |
+|------------------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| Datetime format consistency  | Checked all datetime columns parsed without errors in Power Query      | Passed, all remaining rows have valid datetime values                  |
+| Null value check             | Reviewed column quality indicators in Power Query (Valid, Error, Empty percent) | Learner SignUp DateTime is 100 percent valid, Opportunity Start Date nulls fully removed |
+| Age range check              | Filtered Age column for values below 10 or above 100                   | No unrealistic age values found                                        |
+| Normalised value range       | Verified min and max of normalised columns in Excel                    | All normalised columns confirmed within 0 to 1 range                   |
+| Engagement Score range       | Checked minimum and maximum of Engagement Score column                 | Values confirmed within expected bounds                                |
+| Category encoding accuracy   | Spot checked encoded columns against original Category column          | One hot encoded values correctly matched source categories             |
+| Duplicate check              | Checked for duplicate Learner and Opportunity ID combinations          | No duplicates found in cleaned dataset                                 |
+| Record count reconciliation  | Compared raw versus cleaned row counts                                 | Raw 8,558 reduced to Cleaned 4,682, reduction explained by null rows and errors |
 
 
 ## 6 Exploratory Data Analysis
@@ -207,16 +220,71 @@ Duplicate check	Checked for duplicate Learner + Opportunity ID combinations	No d
 | Sign-ups (monthly avg) | 724 | — | 352 | — | 1,167 |
 
 ### 6.2 Distribribution & Outlier Analysis
+- **Age Distribution** - Right-skewed; majority of learners aged 18–30, mean = 26.6 years. Outliers above age 45 represent non-traditional learners.
+<img width="871" height="359" alt="Screenshot 2026-04-22 101010" src="https://github.com/user-attachments/assets/9e85ff12-604e-4684-a202-6315099963cf" />
+- **Engagement Score** — Bimodal distribution: cluster at 0.30–0.40 (Event learners) and 2.05–2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
+  <img width="876" height="367" alt="Screenshot 2026-04-22 101024" src="https://github.com/user-attachments/assets/f0a8dadf-32dd-4c2b-a105-5ce9d6101da1" />
+
+  - **Engagement Score Distribution by Opportunity Category**
+Internships dominate platform engagement with a median score of **2.06** — **61% higher** than
+Courses (1.28) and **more than 5× higher** than Events (0.37). The steep drop-off across
+categories suggests learners treat opportunity types very differently in terms of depth of
+involvement.
+<img width="870" height="373" alt="Screenshot 2026-04-22 101158" src="https://github.com/user-attachments/assets/9983f90a-75ee-430b-b0ff-93718cd91676" />
+
 
 ### 6.3 Categorical Distribution Summary
+- **Opportunity Category** — Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
+  <img width="878" height="390" alt="Screenshot 2026-04-22 101041" src="https://github.com/user-attachments/assets/ef943a4e-d8be-4839-9c23-6bdaec53f37f" />
+- **Geographic and Gender Breakdown** - 
+The **United States** (3,869) and **India** (2,811) account for ~**79.7%** of all learners.
+Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218)
+rounding out the top five. A **male majority** is consistent across all markets.
+<img width="871" height="375" alt="Screenshot 2026-04-22 101141" src="https://github.com/user-attachments/assets/d9dcca1d-c22b-40e2-a8f2-9850e0494f65" />
 
-The dataset spans five opportunity categories. **Internship** dominates at 63.4% (5,317 records), followed by **Course** at 23.7% (1,992 records) — together representing 87.1% of all records.
-
-The top two source countries are the **United States** (3,869 learners, 46.1%) and **India** (2,817 learners, 33.6%), accounting for nearly 80% of the total learner population.
-Engagement Score by Opportunity Category
 ### 6.4 Seasonal Patterns
-### 6.5 Geographic and Gender Breakdown
+**Sign Ups By Month**
+<img width="871" height="362" alt="Screenshot 2026-04-22 101113" src="https://github.com/user-attachments/assets/38a6e450-5588-41bd-a764-84e6a5ae828d" />
+
+| Month | Sign-Ups | Note |
+|---|---|---|
+| August | 1,167 | Peak month — 57% above average |
+| January | 992 | New Year motivation effect |
+| February | 923 | Strong winter performance |
+| November | 352 | Weakest month of the year |
+
+- **By Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall ~30% below the 1,199 daily average which is very understandable.
+- <img width="870" height="364" alt="Screenshot 2026-04-22 101129" src="https://github.com/user-attachments/assets/2c92efe7-fdd6-4141-bafb-9e53d64edbfc" />
+
 ### 6.5 Learner Status and Feature Correlations
+### Feature Correlation Heatmap — Key Variables (>0.5 Correlation)
+
+Strong multicollinearity exists across engineered time and engagement features.
+**Normalized Time in Opportunity**, **New Time in Opportunity**, and **Engagement Lag**
+form a near-perfect correlation cluster (r = 0.97–1.00), signaling redundancy that
+warrants feature pruning before modeling.
+
+| Feature Pair | Correlation | Strength |
+|---|---|---|
+| Engagement Lag ↔ Normalized Age | 1.00 | Perfect positive |
+| New Time in Opportunity ↔ Normalized Time in Opportunity | 1.00 | Perfect positive |
+| New Engagement Lag ↔ Engagement Lag | 1.00 | Perfect positive |
+| Age × Time in Opportunity ↔ Engagement Score | 0.98 | Very strong positive |
+| Age × Time in Opportunity ↔ Normalized Time in Opportunity | 0.98 | Very strong positive |
+| Engagement Score ↔ New Time in Opportunity | 0.97 | Very strong positive |
+| Has_Start_Date ↔ Engagement Score | −0.98 | Very strong negative |
+| Has_Start_Date ↔ New Time in Opportunity | −0.88 | Strong negative |
+| Normalized Opportunity Category ↔ Engagement Score | 0.84 | Strong positive |
+| New Engagement Lag ↔ New Time in Opportunity | 0.80 | Strong positive |
+<img width="260" height="200" alt="Screenshot 2026-04-22 101426" src="https://github.com/user-attachments/assets/ea40a5db-04ef-4d51-afd9-fff8bcb149d0" />
+
+
+> **`Has_Start_Date`** is the only feature with strong *negative* correlations (−0.53 to −1.0),
+> suggesting that opportunities lacking a defined start date are systematically associated
+> with lower engagement — a potentially high-signal binary flag for predictive models.
+> The interaction term **Age × Time in Opportunity** (r = 0.98 with Engagement Score)
+> outperforms either variable alone, making it a strong candidate as a composite feature.
+
 ### 6.5 The `Has_Start_Date` Feature
 
 A critical binary feature — `Has_Start_Date` — was engineered to distinguish learners who have an Opportunity Start Date recorded (`= 1`) from those who do not (`= 0`).
