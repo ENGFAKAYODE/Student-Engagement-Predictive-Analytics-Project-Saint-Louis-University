@@ -131,6 +131,7 @@ Entries like 'Federal University Lokoja' and 'Federal University Lokoja, Nigeria
 Some datetime values contained impossible hours (e.g., 24:00:09). Resolved by replacing '24:' with '00:' and adding 1 day.
 
 // Power Query M Code
+
 fixed = Text.Replace(raw, " 24:", " 00:"),
 dt = DateTime.FromText(fixed),
 corrected = if hour >= 24 then
@@ -193,7 +194,9 @@ Encoded based on expected engagement level 1–5 (Internship=5, Course=4, Compet
 Engagement Score = (0.5 × Time_Normalized) + (0.2 × Age_Normalized) + (0.3 × OpportunityCategory_Normalized)
 
 Time in Opportunity weighted 50% - most direct measure of active engagement
+
 Opportunity Category weighted 30% - reflects varying commitment levels
+
 Age contributed 20% - demographic influence factor
 
 ### 5.5 Data Validation
@@ -257,7 +260,7 @@ rounding out the top five. A **male majority** is consistent across all markets.
 - <img width="870" height="364" alt="Screenshot 2026-04-22 101129" src="https://github.com/user-attachments/assets/2c92efe7-fdd6-4141-bafb-9e53d64edbfc" />
 
 ### 6.5 Learner Status and Feature Correlations
-### Feature Correlation Heatmap — Key Variables (>0.5 Correlation)
+### Feature Correlation Heatmap — Key Variables
 
 Strong multicollinearity exists across engineered time and engagement features.
 **Normalized Time in Opportunity**, **New Time in Opportunity**, and **Engagement Lag**
