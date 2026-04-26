@@ -19,7 +19,6 @@ completions.
 7. [Exploratory Data Analysis](#7-exploratory-data-analysis)
 8. [Predictive Modelling](#8-predictive-modelling)
 9. [Analysis](#9-analysis)
-10. [Dashboard Link](#10-dashboard-link)
 11. [Recommendations](#11-recommendations)
 12. [Conclusion](#12-conclusion)
 
@@ -747,22 +746,6 @@ opportunities.
 | 7 | August surge catchable with June pre-scoring | Seasonal EDA |
 | 8 | Thursday–Friday peak days for nudge communications | Temporal EDA |
 | 9 | India and Ghana gender gaps = growth opportunity | Demographic EDA |
-
----
-
-## 10. Dashboard Link
-
-> 🔗 **[View Interactive Dashboard →](#)**
->
-> *(Replace `#` with your live dashboard URL)*
-
-The dashboard includes:
-- Real-time churn risk scores per learner segment
-- Monthly sign-up trend with forecast band
-- Engagement Score distribution by Opportunity Category
-- Feature importance visualization
-- Before vs After SMOTE model comparison
-- Country and gender demographic breakdown
 
 ---
 
