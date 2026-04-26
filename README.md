@@ -216,13 +216,13 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 ## 7. EXPLORATORY DATA ANALYSIS
 
-### 7.1 Key Numerical Features — Statistical Summary
+### 7.1 Key Numerical Features , Statistical Summary
 
 | Feature | Mean | Std Dev | Min | Median | Max |
 |---|---|---|---|---|---|
 | Age (years) | 26.6 | 4.6 | 15 | 26 | 60 |
 | Engagement Score | 1.60 | 0.48 | 0.30 | 1.57 | 2.16 |
-| Sign-ups (monthly avg) | 724 | — | 352 | — | 1,167 |
+| Sign-ups (monthly avg) | 724 | , | 352 | , | 1,167 |
 
 ### 7.2 Distribution and Outlier Analysis
 
@@ -320,7 +320,7 @@ A critical binary feature engineered to distinguish learners who have an Opportu
 
 The primary prediction task is **Learner Churn (Drop-off) Prediction**. The target variable `Is_Dropoff` combines 'Dropped Out' (7.2%, 605 learners) and 'Withdraw' (1%, 86 learners), giving a total churn rate of **8.24% (691 learners)**.
 
-### 8.1 Model Performance — Before SMOTE
+### 8.1 Model Performance , Before SMOTE
 
 Five classification algorithms were evaluated using an 80/20 stratified train-test split on the original imbalanced dataset:
 
@@ -334,7 +334,7 @@ Five classification algorithms were evaluated using an 80/20 stratified train-te
 
 Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its Recall of 39.13% means it misses 60% of actual churners. Logistic Regression and SVM scored zero F1 entirely, predicting "no churn" for every learner due to the 11:1 class imbalance.
 
-### 8.2 Feature Importance — Gradient Boosting
+### 8.2 Feature Importance , Gradient Boosting
 
 **Engagement Lag** alone accounts for **62.2%** of predictive power. Combined with **Time in Opportunity** (25.8%), the top two features explain **88%** of the model's decisions. Demographics contribute just 2.4%.
 
@@ -350,7 +350,7 @@ Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its
 
 The model is identity-agnostic, predicting churn based on *when* and *how long* a learner engages, not who they are.
 
-### 8.3 Confusion Matrix — Gradient Boosting (Before SMOTE)
+### 8.3 Confusion Matrix , Gradient Boosting (Before SMOTE)
 
 |  | Predicted No Churn | Predicted Churn |
 |---|---|---|
@@ -359,7 +359,7 @@ The model is identity-agnostic, predicting churn based on *when* and *how long* 
 
 The high False Negative count (84) relative to True Positives (54) reflects the class imbalance challenge. SMOTE is the direct path to improving recall.
 
-### 8.4 SMOTE Resampling — Improving Churn Detection Recall
+### 8.4 SMOTE Resampling , Improving Churn Detection Recall
 
 The original training set suffered from severe **class imbalance**: Non-Churners at 6,159 records, Churners at 553 records, and an imbalance ratio of approximately 11:1. This caused Gradient Boosting to achieve a misleadingly high accuracy of **94.22%** while only catching **39.13%** of actual churners. Logistic Regression and SVM scored **zero F1** entirely. A model that ignores the minority class entirely can still score 91%+ accuracy simply because 91% of learners genuinely do not churn. Accuracy is the wrong metric when classes are this imbalanced.
 
@@ -379,7 +379,7 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 | Ratio | 11:1 | 1:1 (balanced) |
 | Test set | Unchanged | Unchanged |
 
-**Model Performance — Before vs After SMOTE:**
+**Model Performance , Before vs After SMOTE:**
 
 | Model | Metric | Before SMOTE | After SMOTE | Change |
 |---|---|---|---|---|
@@ -394,7 +394,7 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 | **Gradient Boosting** | **Recall** | **39.13%** | **78.99%** | **+39.9%** |
 | **Gradient Boosting** | **F1** | **0.527** | **0.498** | **Stable** |
 
-**Gradient Boosting — Full Metric Comparison:**
+**Gradient Boosting , Full Metric Comparison:**
 
 | Metric | Before SMOTE | After SMOTE | Verdict |
 |---|---|---|---|
@@ -404,16 +404,16 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 | F1-Score | 0.527 | 0.498 | Comparable |
 | Churners Missed (FN) | ~84 | ~29 | 55 fewer missed |
 
-> **55 additional at-risk learners identified per prediction cycle** — purely from rebalancing the training data. No new features, no new data collected.
+> **55 additional at-risk learners identified per prediction cycle** , purely from rebalancing the training data. No new features, no new data collected.
 
-**Confusion Matrix — Before SMOTE:**
+**Confusion Matrix , Before SMOTE:**
 
 |  | Predicted No Churn | Predicted Churn |
 |---|---|---|
 | **Actual No Churn** | 1,527 | 13 |
 | **Actual Churn** | 84 | 54 |
 
-**Confusion Matrix — After SMOTE:**
+**Confusion Matrix , After SMOTE:**
 
 |  | Predicted No Churn | Predicted Churn |
 |---|---|---|
@@ -422,11 +422,11 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 
 The model now catches **~109 churners** vs **54 before**, at the cost of flagging ~100 non-churners unnecessarily instead of 13. On a digital platform where interventions are low-cost automated messages, this trade-off is acceptable.
 
-**Threshold Tuning — Gradient Boosting After SMOTE:**
+**Threshold Tuning , Gradient Boosting After SMOTE:**
 
 | Threshold | Precision | Recall | F1-Score | Recommendation |
 |---|---|---|---|---|
-| **0.5** | 36.33% | 78.99% | **0.498** | Recommended — best F1 |
+| **0.5** | 36.33% | 78.99% | **0.498** | Recommended , best F1 |
 | 0.4 | 34.47% | 80.43% | 0.483 | Marginal recall gain |
 | 0.3 | 29.35% | 85.51% | 0.437 | High recall, low precision |
 | 0.2 | 17.25% | 89.86% | 0.289 | Too aggressive |
@@ -450,11 +450,11 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 
 ### 9.1 Key Insights
 
-**Insight 1 — The Model Now Catches 8 in 10 At-Risk Learners:** After SMOTE rebalancing, recall improved from **39.13% to 78.99%**, and the system now correctly identifies approximately **109 churners** per prediction cycle compared to just 54 before. The 55 additional at-risk learners identified represent real people who would previously have received no intervention whatsoever. The accuracy drop from 94.22% to 86.89% is not a failure — it is the model learning to stop ignoring the minority class and start doing its actual job.
+**1. The Model Now Catches 8 in 10 At-Risk Learners:** After SMOTE rebalancing, recall improved from **39.13% to 78.99%**, and the system now correctly identifies approximately **109 churners** per prediction cycle compared to just 54 before. The 55 additional at-risk learners identified represent real people who would previously have received no intervention whatsoever. The accuracy drop from 94.22% to 86.89% is not a failure , it is the model learning to stop ignoring the minority class and start doing its actual job.
 
-**Insight 2 — Timing Is the Dominant Churn Signal, Confirmed by SMOTE:** Even after rebalancing with 6,159 synthetic churner records, **Engagement Lag (0.622)** and **Time in Opportunity (0.258)** remained the top two features, explaining **88% of the model's decisions**. Their survival through such a dramatic training distribution shift confirms they are genuinely predictive signals, not artefacts of class imbalance. The model is identity-agnostic — demographics contribute just 2.4% even after resampling.
+**2. Timing Is the Dominant Churn Signal, Confirmed by SMOTE:** Even after rebalancing with 6,159 synthetic churner records, **Engagement Lag (0.622)** and **Time in Opportunity (0.258)** remained the top two features, explaining **88% of the model's decisions**. Their survival through such a dramatic training distribution shift confirms they are genuinely predictive signals, not artefacts of class imbalance. The model is identity-agnostic , demographics contribute just 2.4% even after resampling.
 
-**Insight 3 — Two Models Were Previously Broken, Now Fixed:** Before SMOTE, Logistic Regression and SVM scored **zero F1**, predicting "no churn" for every learner. After SMOTE all five models are genuinely operational:
+**3. Two Models Were Previously Broken, Now Fixed:** Before SMOTE, Logistic Regression and SVM scored **zero F1**, predicting "no churn" for every learner. After SMOTE all five models are genuinely operational:
 
 | Model | Recall Before | Recall After | Status |
 |---|---|---|---|
@@ -464,22 +464,22 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 | Random Forest | 49.28% | 57.97% | Improved |
 | **Gradient Boosting** | **39.13%** | **78.99%** | Best recall |
 
-**Insight 4 — Random Forest Is the Precision-Conscious Alternative:** After SMOTE, Random Forest achieves the **highest F1 (0.520)** with stronger precision (47.06%) than Gradient Boosting (36.33%). If interventions scale to high-cost actions such as paid mentors or scholarship flags, Random Forest becomes the more appropriate model without sacrificing much recall.
+**4. Random Forest Is the Precision-Conscious Alternative:** After SMOTE, Random Forest achieves the **highest F1 (0.520)** with stronger precision (47.06%) than Gradient Boosting (36.33%). If interventions scale to high-cost actions such as paid mentors or scholarship flags, Random Forest becomes the more appropriate model without sacrificing much recall.
 
 | Model | Precision | Recall | F1 | Best For |
 |---|---|---|---|---|
 | Gradient Boosting | 36.33% | 78.99% | 0.498 | Maximum recall |
 | Random Forest | 47.06% | 57.97% | 0.520 | Best precision-recall balance |
 
-**Insight 5 — 44% of Learners Never Started and the Model Cannot Reach Them:** SMOTE improved recall for learners who started and dropped out. It cannot address the **3,708 learners (44%)** with `Has_Start_Date = 0`, those allocated but never begun. These learners produce no behavioural timing signals so the model has nothing to predict from. They require a completely separate intervention system triggered by allocation status, not behaviour. The churn model protects learners in the journey; the pre-start activation problem requires a separate pipeline entirely.
+**5. 44% of Learners Never Started and the Model Cannot Reach Them:** SMOTE improved recall for learners who started and dropped out. It cannot address the **3,708 learners (44%)** with `Has_Start_Date = 0`, those allocated but never begun. These learners produce no behavioural timing signals so the model has nothing to predict from. They require a completely separate intervention system triggered by allocation status, not behaviour. The churn model protects learners in the journey; the pre-start activation problem requires a separate pipeline entirely.
 
-**Insight 6 — Internship Churn Is the Platform's Highest-Value Problem:** Internships account for **92.5% of all churners (660 dropouts)** and the highest engagement scores (2.06 median). With 79% recall post-SMOTE, approximately **521 of 660 internship churners** would now be flagged in time for intervention, compared to roughly 258 before resampling. Retaining just 20% of flagged internship churners through successful intervention (~104 learners) would nearly **quadruple** the current completion count of 29.
+**6. Internship Churn Is the Platform's Highest-Value Problem:** Internships account for **92.5% of all churners (660 dropouts)** and the highest engagement scores (2.06 median). With 79% recall post-SMOTE, approximately **521 of 660 internship churners** would now be flagged in time for intervention, compared to roughly 258 before resampling. Retaining just 20% of flagged internship churners through successful intervention (~104 learners) would nearly **quadruple** the current completion count of 29.
 
-**Insight 7 — August Is a Capacity Problem the Model Can Help Pre-empt:** Sign-ups spike 57% above average in August (1,167 vs 724 avg). With a functional 79% recall model, the platform can begin proactive risk scoring from June, entering the August surge with an existing at-risk registry rather than scrambling to identify churners after backlogs have already formed.
+**7. August Is a Capacity Problem the Model Can Help Pre-empt:** Sign-ups spike 57% above average in August (1,167 vs 724 avg). With a functional 79% recall model, the platform can begin proactive risk scoring from June, entering the August surge with an existing at-risk registry rather than scrambling to identify churners after backlogs have already formed.
 
-**Insight 8 — Thursday and Friday Are the Highest-Leverage Communication Days:** Thursday (1,385 signups) and Friday (1,328) significantly outperform the weekly average of 1,199. Model-triggered intervention communications sent mid-to-late week reach learners at their highest engagement window, maximising open rates and response to nudges.
+**8. Thursday and Friday Are the Highest-Leverage Communication Days:** Thursday (1,385 signups) and Friday (1,328) significantly outperform the weekly average of 1,199. Model-triggered intervention communications sent mid-to-late week reach learners at their highest engagement window, maximising open rates and response to nudges.
 
-**Insight 9 — Gender Gaps Signal Untapped Growth Markets:** India (64% male) and Ghana (74% male) show the sharpest gender imbalances of any top-five country. Nigeria, Ghana, and Pakistan together represent just 14.2% of learners despite being active and growing EdTech markets. These gaps are not just equity issues — they represent measurable acquisition and diversification opportunities.
+**9. Gender Gaps Signal Untapped Growth Markets:** India (64% male) and Ghana (74% male) show the sharpest gender imbalances of any top-five country. Nigeria, Ghana, and Pakistan together represent just 14.2% of learners despite being active and growing EdTech markets. These gaps are not just equity issues , they represent measurable acquisition and diversification opportunities.
 
 ### 9.2 Summary Table
 
@@ -487,10 +487,10 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 |---|---|---|
 | 1 | Model now catches 8 in 10 churners (recall 78.99%) | Post-SMOTE modelling |
 | 2 | Engagement Lag (62.2%) confirmed dominant after SMOTE | Feature importance |
-| 3 | LR and SVM now functional — all 5 models operational | Post-SMOTE modelling |
+| 3 | LR and SVM now functional , all 5 models operational | Post-SMOTE modelling |
 | 4 | Random Forest best F1 (0.520) for precision-sensitive use | Post-SMOTE modelling |
 | 5 | 44% never-started learners outside model scope entirely | EDA + Has_Start_Date |
-| 6 | 92.5% of churn from internships — 521 now catchable | EDA + Post-SMOTE recall |
+| 6 | 92.5% of churn from internships , 521 now catchable | EDA + Post-SMOTE recall |
 | 7 | August surge catchable with June pre-scoring | Seasonal EDA |
 | 8 | Thursday-Friday peak days for nudge communications | Temporal EDA |
 | 9 | India and Ghana gender gaps = growth opportunity | Demographic EDA |
@@ -499,17 +499,17 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 
 ## 10. RECOMMENDATIONS
 
-**Recommendation 1 — Deploy the SMOTE-Trained Model for Weekly Live Risk Scoring:** Recall improved to 78.99%, making the model operationally viable for production. The pre-SMOTE model caught only 39% of churners, making deployment irresponsible. Deploy the SMOTE-trained Gradient Boosting model to generate **weekly risk scores** for every active learner at threshold 0.5. Route flagged learners into a tiered response: automated nudge email at flag, peer mentor if no response within 48 hours, and programme coordinator escalation at 72 hours. Run the model on a **rolling weekly basis** so newly at-risk learners are caught early rather than after sustained disengagement. Use **Random Forest as the secondary model** for high-cost interventions (paid mentors, scholarship flags) where its stronger precision (47%) matters more than maximum recall.
+**1. Deploy the SMOTE-Trained Model for Weekly Live Risk Scoring:** Recall improved to 78.99%, making the model operationally viable for production. The pre-SMOTE model caught only 39% of churners, making deployment irresponsible. Deploy the SMOTE-trained Gradient Boosting model to generate **weekly risk scores** for every active learner at threshold 0.5. Route flagged learners into a tiered response: automated nudge email at flag, peer mentor if no response within 48 hours, and programme coordinator escalation at 72 hours. Run the model on a **rolling weekly basis** so newly at-risk learners are caught early rather than after sustained disengagement. Use **Random Forest as the secondary model** for high-cost interventions (paid mentors, scholarship flags) where its stronger precision (47%) matters more than maximum recall.
 
-**Recommendation 2 — Build a 48-Hour Engagement Lag Trigger as the Primary Intervention:** Engagement Lag holds a feature importance of 0.622, making it the single strongest churn predictor, confirmed stable after SMOTE rebalancing. Its dominance survived resampling, proving it is a genuine signal not a statistical artefact. Implement automated triggers at **24 hours and 48 hours** post-signup for learners who have not yet applied. The 24-hour message should be warm and motivational. The 48-hour message should be direct, with a one-click apply link, deadline visibility, and a peer success story from the same opportunity category. Any learner who has not applied by **72 hours** is automatically scored by the model and routed to a human mentor if risk score exceeds 0.5. During August (peak surge), reduce the trigger window to **24 hours** given elevated churn risk during high-intake periods.
+**2 .Build a 48-Hour Engagement Lag Trigger as the Primary Intervention:** Engagement Lag holds a feature importance of 0.622, making it the single strongest churn predictor, confirmed stable after SMOTE rebalancing. Its dominance survived resampling, proving it is a genuine signal not a statistical artefact. Implement automated triggers at **24 hours and 48 hours** post-signup for learners who have not yet applied. The 24-hour message should be warm and motivational. The 48-hour message should be direct, with a one-click apply link, deadline visibility, and a peer success story from the same opportunity category. Any learner who has not applied by **72 hours** is automatically scored by the model and routed to a human mentor if risk score exceeds 0.5. During August (peak surge), reduce the trigger window to **24 hours** given elevated churn risk during high-intake periods.
 
-**Recommendation 3 — Build a Separate Pre-Start Activation Pipeline for Never-Started Learners:** 3,708 learners (44%) with `Has_Start_Date = 0` are entirely outside the churn model's prediction scope. SMOTE improved recall for learners who started but cannot score those who produce no behavioural signals because they never began. Create a dedicated **Activation Pipeline** in the platform. Upon team allocation, trigger a 48-hour countdown. If no start activity after 48 hours, send an activation prompt. If no activity after 7 days, escalate to a coordinator. Introduce a mandatory lightweight onboarding step — profile completion, availability confirmation, or a welcome check-in — as both a commitment signal and an activation gate. Track this cohort under a new **Pending Activation** status so it becomes visible in platform reporting rather than disappearing into cleaned-data exclusions.
+**3. Build a Separate Pre-Start Activation Pipeline for Never-Started Learners:** 3,708 learners (44%) with `Has_Start_Date = 0` are entirely outside the churn model's prediction scope. SMOTE improved recall for learners who started but cannot score those who produce no behavioural signals because they never began. Create a dedicated **Activation Pipeline** in the platform. Upon team allocation, trigger a 48-hour countdown. If no start activity after 48 hours, send an activation prompt. If no activity after 7 days, escalate to a coordinator. Introduce a mandatory lightweight onboarding step , profile completion, availability confirmation, or a welcome check-in , as both a commitment signal and an activation gate. Track this cohort under a new **Pending Activation** status so it becomes visible in platform reporting rather than disappearing into cleaned-data exclusions.
 
-**Recommendation 4 — Launch an Internship-Specific Milestone Retention Programme:** Internships account for 92.5% of churners. The post-SMOTE model can now flag approximately **521 of 660 internship churners**, up from ~258 before resampling. The question shifts from "can we find them" to "what do we do when we find them." Structure internship journeys into **modular milestones** at weeks 1, 3, and 6. Any learner who misses a milestone check-in and carries a model risk score above 0.5 receives peer mentor outreach within 24 hours. Create an **Internship Early Warning Dashboard** visible to programme coordinators showing risk scores, Engagement Lag values, and milestone completion status for all active internship learners. Retaining just **20% of flagged internship churners** through successful interventions (~104 learners) would nearly **quadruple** the current 29 Rewards Award completions.
+**4. Launch an Internship-Specific Milestone Retention Programme:** Internships account for 92.5% of churners. The post-SMOTE model can now flag approximately **521 of 660 internship churners**, up from ~258 before resampling. The question shifts from "can we find them" to "what do we do when we find them." Structure internship journeys into **modular milestones** at weeks 1, 3, and 6. Any learner who misses a milestone check-in and carries a model risk score above 0.5 receives peer mentor outreach within 24 hours. Create an **Internship Early Warning Dashboard** visible to programme coordinators showing risk scores, Engagement Lag values, and milestone completion status for all active internship learners. Retaining just **20% of flagged internship churners** through successful interventions (~104 learners) would nearly **quadruple** the current 29 Rewards Award completions.
 
-**Recommendation 5 — Scale Infrastructure Ahead of August Using June Pre-Scoring:** August signups run 57% above average. With 79% recall, the model can now be used proactively during surge periods rather than reactively after backlogs form. Run the first full platform risk scoring in **June 2026**, entering August with an existing at-risk registry. Scale support staff, automated systems, and partner opportunity slots from June. Alert partner organisations in **May** to prepare additional internship and course slots. During August, increase model scoring from **weekly to twice weekly** to catch newly at-risk learners faster during the high-intake period. Schedule all model-triggered communications on **Thursday or Friday** — peak engagement days — to maximise open and response rates.
+**5. Scale Infrastructure Ahead of August Using June Pre-Scoring:** August signups run 57% above average. With 79% recall, the model can now be used proactively during surge periods rather than reactively after backlogs form. Run the first full platform risk scoring in **June 2026**, entering August with an existing at-risk registry. Scale support staff, automated systems, and partner opportunity slots from June. Alert partner organisations in **May** to prepare additional internship and course slots. During August, increase model scoring from **weekly to twice weekly** to catch newly at-risk learners faster during the high-intake period. Schedule all model-triggered communications on **Thursday or Friday** , peak engagement days , to maximise open and response rates.
 
-**Recommendation 6 — Close Gender and Geographic Gaps as a Growth Strategy:** India is 64% male and Ghana is 74% male, representing the sharpest gender imbalances in the top five. Nigeria, Ghana, and Pakistan together represent only 14.2% of learners despite being active and growing EdTech markets. Launch **female-targeted outreach campaigns** in India and Ghana specifically, partnering with women-in-tech organisations, university societies, and professional networks in those markets. For Nigeria, Ghana, and Pakistan, invest in localised content and regional support contacts to convert interest into activation. Monitor gender balance as a **platform health KPI** alongside retention and completion rates, not just as an equity metric.
+**6. Close Gender and Geographic Gaps as a Growth Strategy:** India is 64% male and Ghana is 74% male, representing the sharpest gender imbalances in the top five. Nigeria, Ghana, and Pakistan together represent only 14.2% of learners despite being active and growing EdTech markets. Launch **female-targeted outreach campaigns** in India and Ghana specifically, partnering with women-in-tech organisations, university societies, and professional networks in those markets. For Nigeria, Ghana, and Pakistan, invest in localised content and regional support contacts to convert interest into activation. Monitor gender balance as a **platform health KPI** alongside retention and completion rates, not just as an equity metric.
 
 ---
 
@@ -517,7 +517,7 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 
 This enhanced analysis successfully extended the EDA and predictive modelling pipeline by incorporating the full **8,390-record dataset**, the engineered `Has_Start_Date` feature, and SMOTE resampling to address class imbalance. Five machine learning models were trained and evaluated across both imbalanced and resampled configurations. **Gradient Boosting** emerged as the definitive production model, achieving **94.22% accuracy** before resampling and **78.99% recall** after SMOTE, catching approximately **109 at-risk learners** per prediction cycle compared to 54 without resampling.
 
-The most significant finding is that **44% of the raw dataset — 3,708 learners — never progressed past the allocation stage**. This population sits entirely outside the churn model's scope and requires a dedicated Activation Pipeline as a separate system. The churn model and the activation pipeline together address the platform's full retention problem: one for learners in the journey, one for learners who never began it.
+The most significant finding is that **44% of the raw dataset , 3,708 learners , never progressed past the allocation stage**. This population sits entirely outside the churn model's scope and requires a dedicated Activation Pipeline as a separate system. The churn model and the activation pipeline together address the platform's full retention problem: one for learners in the journey, one for learners who never began it.
 
 **Engagement Lag (0.622)** and **Time in Opportunity (0.258)** account for **88% of predictive power** across both model configurations, confirming that behavioural timing signals dominate demographic features regardless of resampling method.
 
