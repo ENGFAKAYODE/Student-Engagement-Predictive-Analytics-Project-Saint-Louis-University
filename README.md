@@ -1,6 +1,3 @@
-Here is the full updated README with the post-SMOTE insights and recommendations integrated:
-
-```markdown
 # Student-Engagement-Predictive-Analytics-Project-Saint-Louis-University
 This project focuses on the intersection of EdTech and Data Science by analyzing 
 student engagement data from the Saint Louis University (SLU) Wise Opportunity 
@@ -907,4 +904,3 @@ timing signals dominate demographic features regardless of resampling method.
 > The platform now has a system capable of finding the right learners at the right 
 > time. The remaining question is purely operational: what happens after the flag 
 > fires. Data does not solve problems. People with data do.**
-```
