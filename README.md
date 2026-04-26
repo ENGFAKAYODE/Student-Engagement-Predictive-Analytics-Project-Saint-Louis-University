@@ -1,4 +1,4 @@
-# Student-Engagement-Predictive-Analytics-Project-Saint-Louis-University
+<img width="710" height="340" alt="Screenshot 2026-04-22 104033" src="https://github.com/user-attachments/assets/42e8da01-e52b-4534-afa9-87ca2d09fe74" /># Student-Engagement-Predictive-Analytics-Project-Saint-Louis-University
 This project focuses on the intersection of EdTech and Data Science by analyzing student engagement data from the Saint Louis University (SLU) Wise Opportunity platform. The workflow involved cleaning and pre-processing complex behavioral datasets to uncover trends in user drop-offs. Using Machine Learning, I developed a predictive model to identify "at-risk" students, allowing for the creation of targeted interventions and strategic recommendations to boost successful project completions.
 
 
@@ -213,8 +213,36 @@ Age contributed 20% - demographic influence factor
 | Record count reconciliation  | Compared raw versus cleaned row counts                                 | Raw 8,558 reduced to Cleaned 4,682, reduction explained by null rows and errors |
 
 
-## 6 Exploratory Data Analysis
-### 6.1 Key Numerical Features — Statistical Summary
+---
+
+## 6. DATA TRANSFORMATION
+
+The following transformations were applied to prepare data for modelling:
+
+| Transformation | Description |
+|---|---|
+| `Has_Start_Date` Engineering | Binary flag (0/1) to separate never-started learners from active learners |
+| Excel Date-Zero Correction | Corrupted `Time in Opportunity` values for `Has_Start_Date = 0` in excel was recalculated in Python
+`NaN` was used instead of the misleading today() function used in excel |
+| Engagement Score Recalculation | Recalculated exclusively for started learners after date-zero correction |
+| Engagement Lag Correction | Negative lag values (pre-signup applicants) applied absolute values |
+| Outlier Correction | Plausible outliers (Age max = 60, Time max = 45,630 hrs) corrected after Excel Date-Zero Correction |
+| Encoding | Categorical features (Category, Country, Gender) label-encoded for model compatibility |
+| Train-Test Split | 80/20 stratified split preserving the 8.24% churn class proportion |
+
+### 6.2 OUTLIER AND ANOMALY SUMMARY
+
+| Feature | Nature of Outlier | Action Taken |
+|---|---|---|
+| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Retained for started learners; NaN for never-started |
+| Engagement Lag | Negative values (min = −570 hrs) | Retained — high-motivation pre-signup cohort |
+| Age | Max = 60; Min = 15 | Retained; mean imputation for nulls |
+| Engagement Score | Spike at 2.05+ for `Has_Start_Date = 0` | Recalculated after date-zero correction |
+| `Has_Start_Date = 0` | 3,708 rows (44% of dataset) | Flagged rather than deleted |
+
+---
+## 7 Exploratory Data Analysis
+### 7.1 Key Numerical Features — Statistical Summary
 
 | Feature | Mean | Std Dev | Min | Median | Max |
 |---|---|---|---|---|---|
@@ -222,10 +250,11 @@ Age contributed 20% - demographic influence factor
 | Engagement Score | 1.60 | 0.48 | 0.30 | 1.57 | 2.16 |
 | Sign-ups (monthly avg) | 724 | — | 352 | — | 1,167 |
 
-### 6.2 Distribribution & Outlier Analysis
+### 7.2 Distribribution & Outlier Analysis
 - **Age Distribution** - Right-skewed; majority of learners aged 18–30, mean = 26.6 years. Outliers above age 45 represent non-traditional learners.
 <img width="871" height="359" alt="Screenshot 2026-04-22 101010" src="https://github.com/user-attachments/assets/9e85ff12-604e-4684-a202-6315099963cf" />
-- **Engagement Score** — Bimodal distribution: cluster at 0.30–0.40 (Event learners) and 2.05–2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
+
+- **Engagement Score** - Bimodal distribution; cluster at 0.30–0.40 (Event learners) and 2.05–2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
   <img width="876" height="367" alt="Screenshot 2026-04-22 101024" src="https://github.com/user-attachments/assets/f0a8dadf-32dd-4c2b-a105-5ce9d6101da1" />
 
   - **Engagement Score Distribution by Opportunity Category**
@@ -233,19 +262,51 @@ Internships dominate platform engagement with a median score of **2.06** — **6
 Courses (1.28) and **more than 5× higher** than Events (0.37). The steep drop-off across
 categories suggests learners treat opportunity types very differently in terms of depth of
 involvement.
+
 <img width="870" height="373" alt="Screenshot 2026-04-22 101158" src="https://github.com/user-attachments/assets/9983f90a-75ee-430b-b0ff-93718cd91676" />
 
 
-### 6.3 Categorical Distribution Summary
+### 7.3 Categorical Distribution Summary
 - **Opportunity Category** — Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
+ 
   <img width="878" height="390" alt="Screenshot 2026-04-22 101041" src="https://github.com/user-attachments/assets/ef943a4e-d8be-4839-9c23-6bdaec53f37f" />
-- **Geographic and Gender Breakdown** - 
+  
+- **Geographic and Gender Breakdown** 
+  
 The **United States** (3,869) and **India** (2,811) account for ~**79.7%** of all learners.
 Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218)
 rounding out the top five. A **male majority** is consistent across all markets.
 <img width="871" height="375" alt="Screenshot 2026-04-22 101141" src="https://github.com/user-attachments/assets/d9dcca1d-c22b-40e2-a8f2-9850e0494f65" />
 
-### 6.4 Seasonal Patterns
+
+- **Learners Status Description** 
+  <img width="549" height="264" alt="Screenshot 2026-04-25 164445" src="https://github.com/user-attachments/assets/088da9a1-492d-46bc-84af-00fc3d9585b4" />
+
+**Rejected** and **Team Allocated** together account for **80%** of all learner records,
+dominating the funnel. Only **9%** of learners reach an active *Started* state, and
+**7.2%** drop out — meaning attrition nearly matches active participation.
+> Of learners who progress past rejection, the **dropout rate relative to starters is ~45%**
+
+- **Where are the most churners coming from**
+  **Churn Analysis: Contribution & Absolute Count by Opportunity Category**
+
+**Internships overwhelmingly drive platform churn.** They account for **92.5%** of all
+churned learners and the highest absolute dropout count at **660**, dwarfing every
+other category combined. This mirrors Internships' dominance in volume, but the
+churn concentration is disproportionate even relative to their 63% activity share.
+
+<img width="270" height="120" alt="Screenshot 2026-04-22 101804" src="https://github.com/user-attachments/assets/3c6a8130-e807-47ae-8011-c86825c2dcfa" />
+
+#### Contribution to Total Churners (%)
+
+Internship churn at **660 learners** against a started base suggests the dropout-to-start ratio is critically high in this category. 
+Since Internships also carry the **highest engagement scores (2.06)**, churn here represents the greatest lost value on the platform.
+Reducing Internship dropout by even **10%** (~66 learners retained) would nearly **triple** the current Rewards Award completion count of 29.
+
+  <img width="270" height="120" alt="Screenshot 2026-04-22 101804" src="https://github.com/user-attachments/assets/6a23c582-b3c3-4213-a0bf-33585e3682b4" />
+
+
+### 7.4 Seasonal Patterns
 **Sign Ups By Month**
 <img width="871" height="362" alt="Screenshot 2026-04-22 101113" src="https://github.com/user-attachments/assets/38a6e450-5588-41bd-a764-84e6a5ae828d" />
 
@@ -259,7 +320,7 @@ rounding out the top five. A **male majority** is consistent across all markets.
 - **By Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall ~30% below the 1,199 daily average which is very understandable.
 - <img width="870" height="364" alt="Screenshot 2026-04-22 101129" src="https://github.com/user-attachments/assets/2c92efe7-fdd6-4141-bafb-9e53d64edbfc" />
 
-### 6.5 Learner Status and Feature Correlations
+### 7.5 Learner Status and Feature Correlations
 ### Feature Correlation Heatmap — Key Variables
 
 Strong multicollinearity exists across engineered time and engagement features.
@@ -288,44 +349,18 @@ warrants feature pruning before modeling.
 > The interaction term **Age × Time in Opportunity** (r = 0.98 with Engagement Score)
 > outperforms either variable alone, making it a strong candidate as a composite feature.
 
-### 6.5 The `Has_Start_Date` Feature
+### 7.6 The `Has_Start_Date` Feature
 
 A critical binary feature — `Has_Start_Date` — was engineered to distinguish learners who have an Opportunity Start Date recorded (`= 1`) from those who do not (`= 0`).
 
 > Learners with `Has_Start_Date = 0` never progressed to the start stage of their opportunity. This group represents approximately **44% of the full dataset** and constitutes the **highest-risk segment** on the platform.
 
----
 
-## 6. Data Transformation
+## 8. Predictive Modelling
+The primary prediction task is Learner Churn (Drop-off) Prediction, identifying which learners are at risk of dropping out or withdrawing from their assigned opportunity before completion. The target variable Is_Dropoff combines the 'Dropped Out' (7.2%, 605 learners) and 'Withdraw' (1%, 86 learners) statuses identified above on Learners Status Distribution, giving a total churn rate of 9.2% (691 learners).
 
-The following transformations were applied to prepare data for modelling:
 
-| Transformation | Description |
-|---|---|
-| `Has_Start_Date` Engineering | Binary flag (0/1) to separate never-started learners from active learners |
-| Excel Date-Zero Correction | Corrupted `Time in Opportunity` values for `Has_Start_Date = 0` rows corrected to `NaN` |
-| Engagement Score Recalculation | Recalculated exclusively for started learners after date-zero correction |
-| Engagement Lag Correction | Negative lag values (pre-signup applicants) retained as a high-motivation cohort signal |
-| Outlier Retention | Plausible outliers (Age max = 60, Time max = 45,630 hrs) retained with documentation |
-| Encoding | Categorical features (Category, Country, Gender) label-encoded for model compatibility |
-| Null Imputation | Mean imputation applied to Age nulls; `NaN` assigned for corrupted Engagement Scores |
-| Train-Test Split | 80/20 stratified split preserving the 8.24% churn class proportion |
-
-**Outlier & Anomaly Summary:**
-
-| Feature | Nature of Outlier | Action Taken |
-|---|---|---|
-| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Retained for started learners; NaN for never-started |
-| Engagement Lag | Negative values (min = −570 hrs) | Retained — high-motivation pre-signup cohort |
-| Age | Max = 60; Min = 15 | Retained; mean imputation for nulls |
-| Engagement Score | Spike at 2.05+ for `Has_Start_Date = 0` | Recalculated after date-zero correction |
-| `Has_Start_Date = 0` | 3,708 rows (44% of dataset) | Flagged rather than deleted |
-
----
-
-## 7. Data Modelling
-
-### 7.1 Model Performance Comparison
+### 8.1 Model Performance Comparison
 
 Five classification algorithms were evaluated using an 80/20 stratified train-test split:
 
@@ -337,162 +372,201 @@ Five classification algorithms were evaluated using an 80/20 stratified train-te
 | Random Forest | 0.9303 | 0.5913 | 0.4928 | 0.5375 |
 | **Gradient Boosting ★** | **0.9422** | **0.8060** | **0.3913** | **0.5268** |
 
-> **🔑 Key Finding:** Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its Recall of 39.13% means it misses 60% of actual churners. SMOTE or class-weight balancing is the critical next step.
+<img width="710" height="340" alt="Screenshot 2026-04-22 104033" src="https://github.com/user-attachments/assets/823e8053-f91b-48fc-baf0-15068ae8581b" />
 
-### 7.2 Feature Importance — Gradient Boosting
 
-| Feature | Importance Score |
-|---|---|
-| Engagement Lag | **0.622** |
-| Time in Opportunity | **0.258** |
-| Engagement Score | 0.085 |
-| Encoded Category | 0.011 |
-| Encoded Country | 0.011 |
-| Age | 0.008 |
-| Encoded Gender | 0.005 |
+> **Key Finding:** Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its Recall of 39.13% means it misses 60% of actual churners. SMOTE or class-weight balancing is the critical next step.
 
-Engagement Lag and Time in Opportunity together account for **88% of the model's predictive power**.
+### 8.2 Feature Importance — Gradient Boosting
 
-### 7.3 Confusion Matrix — Gradient Boosting (Test Set)
+The model is overwhelmingly driven by **temporal features**. **Engagement Lag** alone
+accounts for **62.2%** of predictive power, and combined with **Time in Opportunity**
+(25.8%), the top two features explain **88%** of the model's decisions. Demographic
+and categorical encodings contribute minimally.
+
+<img width="260" height="150" alt="Screenshot 2026-04-22 101741" src="https://github.com/user-attachments/assets/2e274696-b7e2-463b-b63f-6192440712ad" />
+
+> **Engagement Lag** and **Time in Opportunity** are pure behavioral-timing signals —
+> the model is essentially predicting outcomes based on *how long* and *how late*
+> a learner engages, not who they are.
+> Demographic features (Age, Gender, Country) collectively contribute just **2.4%**, suggesting the classifier is
+identity-agnostic and timing-dominant.
+
+### 8.3 Confusion Matrix — Gradient Boosting (Test Set)
+<img width="155" height="135" alt="Screenshot 2026-04-22 101749" src="https://github.com/user-attachments/assets/bb201ca4-0875-4233-a2a4-2380a376a542" />
 
 |  | Predicted Negative | Predicted Positive |
 |---|---|---|
-| **Actual Negative** | 1,527 (TN) | 13 (FP) |
-| **Actual Positive** | 84 (FN) | 54 (TP) |
+| **Actual Negative** | 1,527 (True Negative) | 13 (False Positive) |
+| **Actual Positive** | 84 (False Negative) | 54 (True Positive) |
 
-The high False Negative count (84) relative to True Positives (54) reflects the class imbalance challenge. Implementing SMOTE is the most direct path to improving recall from 39.13% toward the 63.97% achieved in the clean-data baseline.
+The high False Negative count (84) relative to True Positives (54) reflects the class imbalance challenge. 
+Implementing SMOTE is the most direct path to improving recall from 39.13% toward the 63.97% achieved in the clean-data baseline.
 
 ---
 
-## 8. Scraping Code
+## 8 SMOTE Resampling — Improving Churn Detection Recall
 
-The dataset was sourced from the **SLU Opportunity Platform** via structured export. Below is the core data ingestion and feature engineering pipeline used in this project:
+### Why SMOTE Was Needed
+
+The original training set suffered from severe **class imbalance**:
+
+- **Non-Churners:** 6,159 records
+- **Churners:** 553 records
+- **Imbalance Ratio:** ~11:1
+
+This caused the Gradient Boosting model to achieve a misleadingly high accuracy of
+**94.22%** while only catching **39.13%** of actual churners - missing 84 out of 138
+at-risk learners in the test set. Logistic Regression and SVM scored **zero F1**
+entirely, predicting "no churn" for every record.
+
+> **The core problem:** A model that ignores the minority class entirely can still
+> score 91%+ accuracy simply because 91% of learners genuinely do not churn.
+> Accuracy is the wrong metric when classes are this imbalanced.
+
+---
+
+### What SMOTE Does
+
+**SMOTE (Synthetic Minority Over-sampling Technique)** generates *synthetic* churner
+records by interpolating between existing minority class examples — rather than simply
+duplicating them. This forces the model to learn what a churner actually looks like
+instead of defaulting to the majority class.
+
+SMOTE was applied **exclusively to the training set**. The test set was never
+resampled — it retains the real-world 8.24% churn distribution to ensure evaluation
+reflects genuine platform conditions.
 
 ```python
-import pandas as pd
-import numpy as np
+from imblearn.over_sampling import SMOTE
 
-# Load raw dataset
-df = pd.read_csv("slu_opportunity_platform_raw.csv")
-
-# --- Feature Engineering: Has_Start_Date ---
-df["Has_Start_Date"] = df["Opportunity Start Date"].notna().astype(int)
-
-# --- Correct Excel date-zero artifact for never-started learners ---
-df.loc[df["Has_Start_Date"] == 0, "Time in Opportunity"] = np.nan
-
-# --- Recalculate Engagement Score for started learners only ---
-category_weights = {
-    "Internship": 2.0, "Course": 1.2, "Competition": 0.9,
-    "Engagement": 0.6, "Event": 0.3
-}
-df["Category_Weight"] = df["Opportunity Category"].map(category_weights)
-df["Engagement Score"] = np.where(
-    df["Has_Start_Date"] == 1,
-    df["Normalized_Time"] * df["Category_Weight"],
-    np.nan
-)
-
-# --- Engagement Lag (hours between signup and application) ---
-df["Signup Date"] = pd.to_datetime(df["Signup Date"])
-df["Application Date"] = pd.to_datetime(df["Application Date"])
-df["Engagement_Lag"] = (
-    df["Application Date"] - df["Signup Date"]
-).dt.total_seconds() / 3600
-
-# --- Label Encoding ---
-from sklearn.preprocessing import LabelEncoder
-for col in ["Opportunity Category", "Country", "Gender"]:
-    df[f"Encoded_{col}"] = LabelEncoder().fit_transform(df[col].fillna("Unknown"))
-
-# --- Train-Test Split (stratified) ---
-from sklearn.model_selection import train_test_split
-X = df[["Engagement_Lag", "Time in Opportunity", "Engagement Score",
-        "Encoded_Opportunity Category", "Encoded_Country", "Age", "Encoded_Gender"]]
-y = df["Churned"]
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, stratify=y, random_state=42
-)
+smote = SMOTE(random_state=42)
+X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_train)
 ```
 
-```python
-# --- Model Training: Gradient Boosting ---
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+**Class balance after SMOTE:**
 
-gb_model = GradientBoostingClassifier(n_estimators=100, random_state=42)
-gb_model.fit(X_train, y_train)
-y_pred = gb_model.predict(X_test)
-
-print(f"Accuracy: {accuracy_score(y_test, y_pred):.4f}")
-print(classification_report(y_test, y_pred))
-print(confusion_matrix(y_test, y_pred))
-```
-
----
-
-## 9. Analysis
-
-### 9.1 Distribution & Outlier Analysis
-
-- **Age Distribution** — Right-skewed; majority of learners aged 18–30, mean = 26.6 years. Outliers above age 45 represent non-traditional learners.
-- **Engagement Score** — Bimodal distribution: cluster at 0.30–0.40 (Event learners) and 2.05–2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
-
-### 9.2 Categorical Distributions
-
-- **Opportunity Category** — Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
-- **Top Countries** — USA (3,869, 46.1%) and India (2,817, 33.6%) represent 79.7% of learners. Nigeria (736, 8.8%) leads African representation.
-
-### 9.3 Seasonal Patterns
-
-| Month | Sign-Ups | Note |
+| Split | Before SMOTE | After SMOTE |
 |---|---|---|
-| August | 1,167 | Peak month — 57% above average |
-| January | 992 | New Year motivation effect |
-| February | 923 | Strong winter performance |
-| November | 352 | Weakest month of the year |
+| Churners (training) | 553 | 6,159 |
+| Non-Churners (training) | 6,159 | 6,159 |
+| Ratio | 11:1 | 1:1 (balanced) |
+| Test set | Unchanged | Unchanged |
 
-- **By Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall ~30% below the 1,199 daily average.
+---
 
-### 9.4 Churn Distribution by Category
+### Model Performance — Before vs After SMOTE
+<img width="369" height="180" alt="image" src="https://github.com/user-attachments/assets/4efcbf0f-4231-4f54-b09c-9f9e40cd3dfc" />
 
-| Category | Churners | Share of Total Churn |
+| Model | Metric | Before SMOTE | After SMOTE | Change |
+|---|---|---|---|---|
+| Logistic Regression | Recall | 0.00% | 60.14% | ⬆ +60.14% |
+| Logistic Regression | F1 | 0.000 | 0.274 | ⬆ Fixed |
+| Decision Tree | Recall | 52.17% | 58.70% | ⬆ +6.5% |
+| Decision Tree | F1 | 0.520 | 0.475 | ≈ stable |
+| SVM | Recall | 0.00% | 68.12% | ⬆ +68.12% |
+| SVM | F1 | 0.000 | 0.264 | ⬆ Fixed |
+| Random Forest | Recall | 49.28% | 57.97% | ⬆ +8.7% |
+| Random Forest | F1 | 0.538 | 0.520 | ≈ stable |
+| **Gradient Boosting** | **Recall** | **39.13%** | **78.99%** | **⬆ +39.9%** |
+| **Gradient Boosting** | **F1** | **0.527** | **0.498** | **≈ stable** |
+
+---
+
+### Gradient Boosting — Full Metric Comparison
+
+| Metric | Before SMOTE | After SMOTE | Verdict |
+|---|---|---|---|
+| Accuracy | 94.22% | 86.89% | ⬇ Expected drop |
+| Precision | 80.60% | 36.33% | ⬇ Acceptable trade-off |
+| Recall | 39.13% | **78.99%** | ⬆ Primary goal achieved |
+| F1-Score | 0.527 | 0.498 | ≈ Comparable |
+| Churners Missed (FN) | ~84 | ~29 | ⬆ 55 fewer missed |
+
+> **55 additional at-risk learners identified per prediction cycle** — purely from
+> rebalancing the training data. No new features, no new data collected.
+
+---
+
+### Confusion Matrix Comparison — Gradient Boosting
+
+**Before SMOTE**
+
+|  | Predicted No Churn | Predicted Churn |
 |---|---|---|
-| Internship | 660 | **92.5%** |
-| Course | 24 | 3.4% |
-| Competition | 5 | 0.7% |
-| Event | 2 | 0.3% |
-| Engagement | 0 | 0.0% |
+| **Actual No Churn** | 1,527 ✅ | 13 ❌ |
+| **Actual Churn** | 84 ❌ | 54 ✅ |
 
-### 9.5 Eight Key Strategic Insights
+**After SMOTE**
 
-| # | Insight |
-|---|---|
-| 1 | Gradient Boosting achieves **94.22% accuracy** and **80.60% precision** — SMOTE is the next step to improve recall |
-| 2 | **Engagement Lag (0.622)** is the single strongest churn predictor — a 48-hour nudge is the highest-ROI intervention |
-| 3 | `Has_Start_Date = 0` reveals **3,708 invisible churners** (44% of dataset) previously discarded during cleaning |
-| 4 | **Internship accounts for 92.5%** of all churners — modular milestones and early monitoring are the direct fix |
-| 5 | **August surges 57%** above average — capacity planning must begin in June |
-| 6 | India's gender gap (64% M / 36% F) presents a clear **female outreach opportunity** |
-| 7 | **Thursday–Friday** are the highest-engagement days — schedule automated comms mid-to-late week |
-| 8 | Logistic Regression and SVM scored **zero F1** due to class imbalance — class weighting is mandatory before deployment |
+|  | Predicted No Churn | Predicted Churn |
+|---|---|---|
+| **Actual No Churn** | ~1,440 ✅ | ~100 ❌ |
+| **Actual Churn** | ~29 ❌ | ~109 ✅ |
+
+The model now catches **~109 churners** vs **54 before** — at the cost of
+flagging ~100 non-churners unnecessarily instead of 13.
 
 ---
 
-## 10. Dashboard Link
+### Threshold Tuning — Gradient Boosting After SMOTE
 
-> 🔗 **[View Interactive Dashboard →](#)**
->
-> *(Replace `#` with your live dashboard URL — e.g., Power BI, Tableau, Looker Studio, or Streamlit)*
+Beyond SMOTE, the decision threshold was tuned to further control the
+precision-recall trade-off:
 
-The dashboard includes:
-- Real-time churn risk scores per learner segment
-- Monthly sign-up trend with forecast band
-- Engagement Score distribution by Opportunity Category
-- Feature importance visualization
-- Country & gender demographic breakdown
+| Threshold | Precision | Recall | F1-Score | Use Case |
+|---|---|---|---|---|
+| **0.5** | 36.33% | 78.99% | **0.498** | ✅ Recommended — best F1 |
+| 0.4 | 34.47% | 80.43% | 0.483 | Marginal recall gain |
+| 0.3 | 29.35% | 85.51% | 0.437 | High recall, low precision |
+| 0.2 | 17.25% | 89.86% | 0.289 | Too aggressive |
+
+**Recommended threshold: 0.5** — delivers the strongest F1 score while
+capturing nearly 8 in 10 at-risk learners. Only lower the threshold if
+the platform can operationally handle a high volume of intervention flags.
 
 ---
+
+### Why After SMOTE Is the Better Model for This Use Case
+
+The accuracy drop from 94.22% to 86.89% is intentional and correct.
+
+**Before SMOTE** — The model behaves like a cautious screener that rarely
+flags anyone. When it does, it is usually right (80% precision). But it
+silently misses **84 out of 138** genuine churners — learners who needed
+help and received none.
+
+**After SMOTE** — The model flags more aggressively. It misses only
+**~29 churners**, recovering 55 additional at-risk learners per cycle.
+The false alarm cost on a digital platform is negligible — an unnecessary
+nudge email — while the cost of a missed churner is a permanent dropout.
+
+| Decision Factor | Before SMOTE | After SMOTE | Better For This Project |
+|---|---|---|---|
+| Learners correctly flagged at risk | 54 | ~109 | ✅ After |
+| Learners wrongly flagged | 13 | ~100 | ✅ Before |
+| Churners silently missed | 84 | ~29 | ✅ After |
+| Cost of false alarm | Low (nudge email) | Low (nudge email) | Neutral |
+| Cost of missed churner | High (permanent dropout) | High (permanent dropout) | Neutral |
+| Serves platform retention KPI | ❌ Partially | ✅ Yes | ✅ After |
+
+> **Design Decision:** After SMOTE is adopted as the final production model.
+> The precision trade-off is explicitly accepted given that interventions on
+> this platform are low-cost (automated emails, peer nudges, mentor flags)
+> and the consequences of missing a churner — permanent learner loss — far
+> outweigh the cost of an unnecessary outreach message.
+
+---
+
+### Key Takeaway
+
+SMOTE did not make the model more accurate. It made the model more **useful**.
+A 94% accurate model that ignores 84 real churners does not serve the platform.
+An 87% accurate model that catches 109 of them does.
+
+> **Data does not solve problems. A model that catches the right people does.**
+
+
 
 ## 11. Recommendations
 
