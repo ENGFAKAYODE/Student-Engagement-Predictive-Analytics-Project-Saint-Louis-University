@@ -232,17 +232,17 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 ### 7.2 Distribution and Outlier Analysis
 
-**Age Distribution** is right-skewed, with the majority of learners aged 18-30 and a mean of 26.6 years. Outliers above age 45 represent non-traditional learners.
+**1. Age Distribution** is right-skewed, with the majority of learners aged 18-30 and a mean of 26.6 years. Outliers above age 45 represent non-traditional learners.
 
 <img width="871" height="359" alt="Screenshot 2026-04-22 101010" src="https://github.com/user-attachments/assets/9e85ff12-604e-4684-a202-6315099963cf" />
 
 
-**Engagement Score** shows a bimodal distribution with a cluster at 0.30-0.40 (Event learners) and 2.05-2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
+**2. Engagement Score** shows a bimodal distribution with a cluster at 0.30-0.40 (Event learners) and 2.05-2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
 
 <img width="876" height="367" alt="Screenshot 2026-04-22 101024" src="https://github.com/user-attachments/assets/f0a8dadf-32dd-4c2b-a105-5ce9d6101da1" />
 
 
-**Engagement Score Distribution by Opportunity Category:** Internships dominate platform engagement with a median score of **2.06**, which is 61% higher than Courses (1.28) and more than 5 times higher than Events (0.37). The steep drop-off across categories suggests learners treat opportunity types very differently in terms of depth of involvement.
+**3. Engagement Score Distribution by Opportunity Category:** Internships dominate platform engagement with a median score of **2.06**, which is 61% higher than Courses (1.28) and more than 5 times higher than Events (0.37). The steep drop-off across categories suggests learners treat opportunity types very differently in terms of depth of involvement.
 
 | Category | Median Score | vs. Internship |
 |---|---|---|
@@ -257,12 +257,12 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 ### 7.3 Categorical Distribution Summary
 
-**Opportunity Category:** Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
+**1. Opportunity Category:** Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
 
 <img width="878" height="390" alt="Screenshot 2026-04-22 101041" src="https://github.com/user-attachments/assets/ef943a4e-d8be-4839-9c23-6bdaec53f37f" />
 
 
-**Geographic and Gender Breakdown:** The **United States** (3,869) and **India** (2,811) account for approximately **79.7%** of all learners. Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218) rounding out the top five. A **male majority** is consistent across all markets.
+**2. Geographic and Gender Breakdown:** The **United States** (3,869) and **India** (2,811) account for approximately **79.7%** of all learners. Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218) rounding out the top five. A **male majority** is consistent across all markets.
 
 | Country | Female | Male | Total | % Male |
 |---|---|---|---|---|
@@ -275,7 +275,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 <img width="871" height="375" alt="Screenshot 2026-04-22 101141" src="https://github.com/user-attachments/assets/d9dcca1d-c22b-40e2-a8f2-9850e0494f65" />
 
 
-**Learner Status Distribution:** Rejected and Team Allocated together account for **80%** of all learner records. Only **9%** reach an active Started state, and **7.2%** drop out, meaning attrition nearly matches active participation.
+**3. Learner Status Distribution:** Rejected and Team Allocated together account for **80%** of all learner records. Only **9%** reach an active Started state, and **7.2%** drop out, meaning attrition nearly matches active participation.
 
 | Status | Count | Share |
 |---|---|---|
@@ -293,7 +293,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 > Of learners who progress past rejection, the **dropout rate relative to starters is approximately 45%**, and the full funnel yield is under **0.5%** of total records.
 
-**Churn by Opportunity Category:** Internships account for **92.5%** of all churned learners (660 dropouts), disproportionate even relative to their 63% activity share.
+**4. Churn by Opportunity Category:** Internships account for **92.5%** of all churned learners (660 dropouts), disproportionate even relative to their 63% activity share.
 
 | Category | Learners Lost | Churn Share |
 |---|---|---|
@@ -307,7 +307,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 ### 7.4 Seasonal Patterns
 
-**Sign-Ups by Month:**
+**1. Sign-Ups by Month:**
 
 | Month | Sign-Ups | Note |
 |---|---|---|
@@ -318,7 +318,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 <img width="871" height="362" alt="Screenshot 2026-04-22 101113" src="https://github.com/user-attachments/assets/38a6e450-5588-41bd-a764-84e6a5ae828d" />
 
-**Sign-Ups by Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall approximately 30% below the 1,199 daily average.
+**2. Sign-Ups by Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall approximately 30% below the 1,199 daily average.
 
 <img width="870" height="364" alt="Screenshot 2026-04-22 101129" src="https://github.com/user-attachments/assets/2c92efe7-fdd6-4141-bafb-9e53d64edbfc" />
 
@@ -336,7 +336,7 @@ Strong multicollinearity exists across engineered time and engagement features. 
 | Has_Start_Date to New Time in Opportunity | -0.88 | Strong negative |
 | Normalized Opportunity Category to Engagement Score | 0.84 | Strong positive |
 
-<img width="260" height="200" alt="Screenshot 2026-04-22 101426" src="https://github.com/user-attachments/assets/ea40a5db-04ef-4d51-afd9-fff8bcb149d0" />
+<img width="600" height="600" alt="Screenshot 2026-04-22 101426" src="https://github.com/user-attachments/assets/ea40a5db-04ef-4d51-afd9-fff8bcb149d0" />
 
 **`Has_Start_Date`** is the only feature with strong negative correlations (-0.53 to -1.0), making it a high-signal binary flag for predictive models. The interaction term **Age x Time in Opportunity** (r = 0.98 with Engagement Score) outperforms either variable alone as a composite feature.
 
@@ -362,7 +362,7 @@ Five classification algorithms were evaluated using an 80/20 stratified train-te
 | Random Forest | 0.9303 | 0.5913 | 0.4928 | 0.5375 |
 | **Gradient Boosting** | **0.9422** | **0.8060** | **0.3913** | **0.5268** |
 
-<img width="710" height="340" alt="Screenshot 2026-04-22 104033" src="https://github.com/user-attachments/assets/823e8053-f91b-48fc-baf0-15068ae8581b" />
+<img width="710" height="640" alt="Screenshot 2026-04-22 104033" src="https://github.com/user-attachments/assets/823e8053-f91b-48fc-baf0-15068ae8581b" />
 
 Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its Recall of 39.13% means it misses 60% of actual churners. Logistic Regression and SVM scored zero F1 entirely, predicting "no churn" for every learner due to the 11:1 class imbalance.
 
@@ -380,7 +380,7 @@ Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its
 | 6 | Age | 0.008 | 99.5% |
 | 7 | Encoded_Gender_Adv | 0.005 | 100.0% |
 
-<img width="260" height="150" alt="Screenshot 2026-04-22 101741" src="https://github.com/user-attachments/assets/2e274696-b7e2-463b-b63f-6192440712ad" />
+<img width="600" height="350" alt="Screenshot 2026-04-22 101741" src="https://github.com/user-attachments/assets/2e274696-b7e2-463b-b63f-6192440712ad" />
 
 The model is identity-agnostic, predicting churn based on *when* and *how long* a learner engages, not who they are.
 
@@ -391,7 +391,7 @@ The model is identity-agnostic, predicting churn based on *when* and *how long* 
 | **Actual No Churn** | 1,527 | 13 |
 | **Actual Churn** | 84 | 54 |
 
-<img width="155" height="135" alt="Screenshot 2026-04-22 101749" src="https://github.com/user-attachments/assets/bb201ca4-0875-4233-a2a4-2380a376a542" />
+<img width="655" height="635" alt="Screenshot 2026-04-22 101749" src="https://github.com/user-attachments/assets/bb201ca4-0875-4233-a2a4-2380a376a542" />
 
 The high False Negative count (84) relative to True Positives (54) reflects the class imbalance challenge. SMOTE is the direct path to improving recall.
 
