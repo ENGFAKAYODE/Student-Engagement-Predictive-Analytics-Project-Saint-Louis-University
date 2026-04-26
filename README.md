@@ -206,8 +206,8 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 | Feature | Nature of Outlier | Action Taken |
 |---|---|---|
-| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Got corrected after python was used to calculate it; NaN for never-started |
-| Engagement Lag | Negative values (min = -570 hrs) | Applied absolute value |
+| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Retained for started learners; NaN for never-started |
+| Engagement Lag | Negative values (min = -570 hrs) | Retained as a high-motivation pre-signup cohort |
 | Age | Max = 60; Min = 15 | Retained; mean imputation for nulls |
 | Engagement Score | Spike at 2.05+ for `Has_Start_Date = 0` | Recalculated after date-zero correction |
 | `Has_Start_Date = 0` | 3,708 rows (44% of dataset) | Flagged rather than deleted |
@@ -228,7 +228,11 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 **Age Distribution** is right-skewed, with the majority of learners aged 18-30 and a mean of 26.6 years. Outliers above age 45 represent non-traditional learners.
 
+<img width="871" height="359" alt="Screenshot 2026-04-22 101010" src="https://github.com/user-attachments/assets/9e85ff12-604e-4684-a202-6315099963cf" />
+
 **Engagement Score** shows a bimodal distribution with a cluster at 0.30-0.40 (Event learners) and 2.05-2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
+
+<img width="876" height="367" alt="Screenshot 2026-04-22 101024" src="https://github.com/user-attachments/assets/f0a8dadf-32dd-4c2b-a105-5ce9d6101da1" />
 
 **Engagement Score Distribution by Opportunity Category:** Internships dominate platform engagement with a median score of **2.06**, which is 61% higher than Courses (1.28) and more than 5 times higher than Events (0.37). The steep drop-off across categories suggests learners treat opportunity types very differently in terms of depth of involvement.
 
@@ -240,9 +244,13 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | Engagement | 0.68 | -67% |
 | Event | 0.37 | -82% |
 
+<img width="870" height="373" alt="Screenshot 2026-04-22 101158" src="https://github.com/user-attachments/assets/9983f90a-75ee-430b-b0ff-93718cd91676" />
+
 ### 7.3 Categorical Distribution Summary
 
 **Opportunity Category:** Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
+
+<img width="878" height="390" alt="Screenshot 2026-04-22 101041" src="https://github.com/user-attachments/assets/ef943a4e-d8be-4839-9c23-6bdaec53f37f" />
 
 **Geographic and Gender Breakdown:** The **United States** (3,869) and **India** (2,811) account for approximately **79.7%** of all learners. Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218) rounding out the top five. A **male majority** is consistent across all markets.
 
@@ -253,6 +261,8 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | Nigeria | 331 | 398 | 729 | 55% |
 | Ghana | 67 | 195 | 262 | 74% |
 | Pakistan | 91 | 127 | 218 | 58% |
+
+<img width="871" height="375" alt="Screenshot 2026-04-22 101141" src="https://github.com/user-attachments/assets/d9dcca1d-c22b-40e2-a8f2-9850e0494f65" />
 
 **Learner Status Distribution:** Rejected and Team Allocated together account for **80%** of all learner records. Only **9%** reach an active Started state, and **7.2%** drop out, meaning attrition nearly matches active participation.
 
@@ -266,6 +276,8 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | Waitlisted | 102 | 1.2% |
 | Withdraw | 86 | 1.0% |
 | Rewards Award | 29 | 0.3% |
+
+<img width="549" height="264" alt="Screenshot 2026-04-25 164445" src="https://github.com/user-attachments/assets/088da9a1-492d-46bc-84af-00fc3d9585b4" />
 
 > Of learners who progress past rejection, the **dropout rate relative to starters is approximately 45%**, and the full funnel yield is under **0.5%** of total records.
 
@@ -292,7 +304,11 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | February | 923 | Strong winter performance |
 | November | 352 | Weakest month of the year |
 
+<img width="871" height="362" alt="Screenshot 2026-04-22 101113" src="https://github.com/user-attachments/assets/38a6e450-5588-41bd-a764-84e6a5ae828d" />
+
 **Sign-Ups by Day of Week:** Thursday leads (1,385), followed by Friday (1,328) and Monday (1,316). Weekends fall approximately 30% below the 1,199 daily average.
+
+<img width="870" height="364" alt="Screenshot 2026-04-22 101129" src="https://github.com/user-attachments/assets/2c92efe7-fdd6-4141-bafb-9e53d64edbfc" />
 
 ### 7.5 Feature Correlation Heatmap
 
@@ -307,6 +323,8 @@ Strong multicollinearity exists across engineered time and engagement features. 
 | Has_Start_Date to Engagement Score | -0.98 | Very strong negative |
 | Has_Start_Date to New Time in Opportunity | -0.88 | Strong negative |
 | Normalized Opportunity Category to Engagement Score | 0.84 | Strong positive |
+
+<img width="260" height="200" alt="Screenshot 2026-04-22 101426" src="https://github.com/user-attachments/assets/ea40a5db-04ef-4d51-afd9-fff8bcb149d0" />
 
 **`Has_Start_Date`** is the only feature with strong negative correlations (-0.53 to -1.0), making it a high-signal binary flag for predictive models. The interaction term **Age x Time in Opportunity** (r = 0.98 with Engagement Score) outperforms either variable alone as a composite feature.
 
@@ -332,6 +350,8 @@ Five classification algorithms were evaluated using an 80/20 stratified train-te
 | Random Forest | 0.9303 | 0.5913 | 0.4928 | 0.5375 |
 | **Gradient Boosting** | **0.9422** | **0.8060** | **0.3913** | **0.5268** |
 
+<img width="710" height="340" alt="Screenshot 2026-04-22 104033" src="https://github.com/user-attachments/assets/823e8053-f91b-48fc-baf0-15068ae8581b" />
+
 Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its Recall of 39.13% means it misses 60% of actual churners. Logistic Regression and SVM scored zero F1 entirely, predicting "no churn" for every learner due to the 11:1 class imbalance.
 
 ### 8.2 Feature Importance , Gradient Boosting
@@ -348,6 +368,8 @@ Gradient Boosting wins on Accuracy (94.22%) and Precision (80.60%). However, its
 | 6 | Age | 0.008 | 99.5% |
 | 7 | Encoded_Gender_Adv | 0.005 | 100.0% |
 
+<img width="260" height="150" alt="Screenshot 2026-04-22 101741" src="https://github.com/user-attachments/assets/2e274696-b7e2-463b-b63f-6192440712ad" />
+
 The model is identity-agnostic, predicting churn based on *when* and *how long* a learner engages, not who they are.
 
 ### 8.3 Confusion Matrix , Gradient Boosting (Before SMOTE)
@@ -356,6 +378,8 @@ The model is identity-agnostic, predicting churn based on *when* and *how long* 
 |---|---|---|
 | **Actual No Churn** | 1,527 | 13 |
 | **Actual Churn** | 84 | 54 |
+
+<img width="155" height="135" alt="Screenshot 2026-04-22 101749" src="https://github.com/user-attachments/assets/bb201ca4-0875-4233-a2a4-2380a376a542" />
 
 The high False Negative count (84) relative to True Positives (54) reflects the class imbalance challenge. SMOTE is the direct path to improving recall.
 
@@ -394,6 +418,8 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 | **Gradient Boosting** | **Recall** | **39.13%** | **78.99%** | **+39.9%** |
 | **Gradient Boosting** | **F1** | **0.527** | **0.498** | **Stable** |
 
+<img width="369" height="180" alt="image" src="https://github.com/user-attachments/assets/4efcbf0f-4231-4f54-b09c-9f9e40cd3dfc" />
+
 **Gradient Boosting , Full Metric Comparison:**
 
 | Metric | Before SMOTE | After SMOTE | Verdict |
@@ -403,6 +429,8 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 | Recall | 39.13% | **78.99%** | Primary goal achieved |
 | F1-Score | 0.527 | 0.498 | Comparable |
 | Churners Missed (FN) | ~84 | ~29 | 55 fewer missed |
+
+<img width="649" height="380" alt="image" src="https://github.com/user-attachments/assets/08171665-a6de-427a-8a23-1a6ae5fdade5" />
 
 > **55 additional at-risk learners identified per prediction cycle** , purely from rebalancing the training data. No new features, no new data collected.
 
@@ -419,6 +447,8 @@ X_train_resampled, y_train_resampled = smote.fit_resample(X_train_scaled, y_trai
 |---|---|---|
 | **Actual No Churn** | ~1,440 | ~100 |
 | **Actual Churn** | ~29 | ~109 |
+
+<img width="768" height="621" alt="image" src="https://github.com/user-attachments/assets/2a6a1f0c-a0a5-4ee7-b4fa-d8cb3b6af6e8" />
 
 The model now catches **~109 churners** vs **54 before**, at the cost of flagging ~100 non-churners unnecessarily instead of 13. On a digital platform where interventions are low-cost automated messages, this trade-off is acceptable.
 
@@ -501,7 +531,7 @@ The model now catches **~109 churners** vs **54 before**, at the cost of flaggin
 
 **1. Deploy the SMOTE-Trained Model for Weekly Live Risk Scoring:** Recall improved to 78.99%, making the model operationally viable for production. The pre-SMOTE model caught only 39% of churners, making deployment irresponsible. Deploy the SMOTE-trained Gradient Boosting model to generate **weekly risk scores** for every active learner at threshold 0.5. Route flagged learners into a tiered response: automated nudge email at flag, peer mentor if no response within 48 hours, and programme coordinator escalation at 72 hours. Run the model on a **rolling weekly basis** so newly at-risk learners are caught early rather than after sustained disengagement. Use **Random Forest as the secondary model** for high-cost interventions (paid mentors, scholarship flags) where its stronger precision (47%) matters more than maximum recall.
 
-**2 .Build a 48-Hour Engagement Lag Trigger as the Primary Intervention:** Engagement Lag holds a feature importance of 0.622, making it the single strongest churn predictor, confirmed stable after SMOTE rebalancing. Its dominance survived resampling, proving it is a genuine signal not a statistical artefact. Implement automated triggers at **24 hours and 48 hours** post-signup for learners who have not yet applied. The 24-hour message should be warm and motivational. The 48-hour message should be direct, with a one-click apply link, deadline visibility, and a peer success story from the same opportunity category. Any learner who has not applied by **72 hours** is automatically scored by the model and routed to a human mentor if risk score exceeds 0.5. During August (peak surge), reduce the trigger window to **24 hours** given elevated churn risk during high-intake periods.
+**2. Build a 48-Hour Engagement Lag Trigger as the Primary Intervention:** Engagement Lag holds a feature importance of 0.622, making it the single strongest churn predictor, confirmed stable after SMOTE rebalancing. Its dominance survived resampling, proving it is a genuine signal not a statistical artefact. Implement automated triggers at **24 hours and 48 hours** post-signup for learners who have not yet applied. The 24-hour message should be warm and motivational. The 48-hour message should be direct, with a one-click apply link, deadline visibility, and a peer success story from the same opportunity category. Any learner who has not applied by **72 hours** is automatically scored by the model and routed to a human mentor if risk score exceeds 0.5. During August (peak surge), reduce the trigger window to **24 hours** given elevated churn risk during high-intake periods.
 
 **3. Build a Separate Pre-Start Activation Pipeline for Never-Started Learners:** 3,708 learners (44%) with `Has_Start_Date = 0` are entirely outside the churn model's prediction scope. SMOTE improved recall for learners who started but cannot score those who produce no behavioural signals because they never began. Create a dedicated **Activation Pipeline** in the platform. Upon team allocation, trigger a 48-hour countdown. If no start activity after 48 hours, send an activation prompt. If no activity after 7 days, escalate to a coordinator. Introduce a mandatory lightweight onboarding step , profile completion, availability confirmation, or a welcome check-in , as both a commitment signal and an activation gate. Track this cohort under a new **Pending Activation** status so it becomes visible in platform reporting rather than disappearing into cleaned-data exclusions.
 
