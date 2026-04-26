@@ -236,9 +236,11 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 <img width="871" height="359" alt="Screenshot 2026-04-22 101010" src="https://github.com/user-attachments/assets/9e85ff12-604e-4684-a202-6315099963cf" />
 
+
 **Engagement Score** shows a bimodal distribution with a cluster at 0.30-0.40 (Event learners) and 2.05-2.10 (Internship learners). The 1.10 threshold is the primary early-intervention trigger point.
 
 <img width="876" height="367" alt="Screenshot 2026-04-22 101024" src="https://github.com/user-attachments/assets/f0a8dadf-32dd-4c2b-a105-5ce9d6101da1" />
+
 
 **Engagement Score Distribution by Opportunity Category:** Internships dominate platform engagement with a median score of **2.06**, which is 61% higher than Courses (1.28) and more than 5 times higher than Events (0.37). The steep drop-off across categories suggests learners treat opportunity types very differently in terms of depth of involvement.
 
@@ -252,11 +254,13 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 <img width="870" height="373" alt="Screenshot 2026-04-22 101158" src="https://github.com/user-attachments/assets/9983f90a-75ee-430b-b0ff-93718cd91676" />
 
+
 ### 7.3 Categorical Distribution Summary
 
 **Opportunity Category:** Internship leads at 63.4% (5,317 records). Course is second at 23.7% (1,992). Together they represent 87.1% of all platform activity.
 
 <img width="878" height="390" alt="Screenshot 2026-04-22 101041" src="https://github.com/user-attachments/assets/ef943a4e-d8be-4839-9c23-6bdaec53f37f" />
+
 
 **Geographic and Gender Breakdown:** The **United States** (3,869) and **India** (2,811) account for approximately **79.7%** of all learners. Nigeria leads African representation at **729 learners**, with Ghana (262) and Pakistan (218) rounding out the top five. A **male majority** is consistent across all markets.
 
@@ -269,6 +273,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | Pakistan | 91 | 127 | 218 | 58% |
 
 <img width="871" height="375" alt="Screenshot 2026-04-22 101141" src="https://github.com/user-attachments/assets/d9dcca1d-c22b-40e2-a8f2-9850e0494f65" />
+
 
 **Learner Status Distribution:** Rejected and Team Allocated together account for **80%** of all learner records. Only **9%** reach an active Started state, and **7.2%** drop out, meaning attrition nearly matches active participation.
 
@@ -284,6 +289,7 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 | Rewards Award | 29 | 0.3% |
 
 <img width="549" height="264" alt="Screenshot 2026-04-25 164445" src="https://github.com/user-attachments/assets/088da9a1-492d-46bc-84af-00fc3d9585b4" />
+
 
 > Of learners who progress past rejection, the **dropout rate relative to starters is approximately 45%**, and the full funnel yield is under **0.5%** of total records.
 
