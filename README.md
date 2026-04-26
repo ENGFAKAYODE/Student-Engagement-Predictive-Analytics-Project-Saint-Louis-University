@@ -206,8 +206,8 @@ Time in Opportunity is weighted 50% as the most direct measure of active engagem
 
 | Feature | Nature of Outlier | Action Taken |
 |---|---|---|
-| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Retained for started learners; NaN for never-started |
-| Engagement Lag | Negative values (min = -570 hrs) | Retained as a high-motivation pre-signup cohort |
+| Time in Opportunity | Max = 45,630 hrs (~5.2 yrs) | Got corrected after python was used to calculate it; NaN for never-started |
+| Engagement Lag | Negative values (min = -570 hrs) | Applied absolute value |
 | Age | Max = 60; Min = 15 | Retained; mean imputation for nulls |
 | Engagement Score | Spike at 2.05+ for `Has_Start_Date = 0` | Recalculated after date-zero correction |
 | `Has_Start_Date = 0` | 3,708 rows (44% of dataset) | Flagged rather than deleted |
