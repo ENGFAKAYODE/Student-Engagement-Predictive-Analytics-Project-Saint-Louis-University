@@ -43,7 +43,13 @@ The primary objective of this project is to build a reliable and interpretable *
 
 ## 4. OTHER SKILLS DEMONSTRATED
 
-Beyond core EDA and modelling, this project demonstrates proficiency in: **Feature Engineering** (constructing `Has_Start_Date`, Engagement Lag, and composite Engagement Score from raw timestamps and categorical weights); **Data Artifact Detection** (identifying and correcting Excel date-zero corruption that inflated `Time in Opportunity` values for never-started learners); **Class Imbalance Handling** (diagnosing zero-performance in Logistic Regression and SVM caused by an 8.24% churn class imbalance, and resolving it through SMOTE resampling, improving Gradient Boosting recall from 39.13% to 78.99%); **Time-Series Forecasting** (fitting a linear regression trend model to monthly sign-up data with a 95% confidence interval projection); **Visual Storytelling** (a portfolio of 13 visualizations across distribution, categorical, correlation, and model evaluation plots); and **Strategic Communication** (translating statistical findings into executive-ready intervention proposals grounded in model outputs).
+Beyond core EDA and modelling, this project demonstrates proficiency in: 
+- **Feature Engineering** (constructing `Has_Start_Date`, Engagement Lag, and composite Engagement Score from raw timestamps and categorical weights);
+- **Data Artifact Detection** (identifying and correcting Excel date-zero corruption that inflated `Time in Opportunity` values for never-started learners);
+- **Class Imbalance Handling** (diagnosing zero-performance in Logistic Regression and SVM caused by an 8.24% churn class imbalance, and resolving it through SMOTE resampling, improving Gradient Boosting recall from 39.13% to 78.99%);
+- **Time-Series Forecasting** (fitting a linear regression trend model to monthly sign-up data with a 95% confidence interval projection);
+- **Visual Storytelling** (a portfolio of 13 visualizations across distribution, categorical, correlation, and model evaluation plots); and
+- **Strategic Communication** (translating statistical findings into executive-ready intervention proposals grounded in model outputs).
 
 ---
 
